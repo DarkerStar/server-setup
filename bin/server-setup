@@ -114,4 +114,62 @@ export localstatedir
 # Preparation ##########################################################
 ########################################################################
 
+# Set the script name, used in error and logging outut.
 script_name="${package}"
+
+# Set up and export the important variables.
+configdir="${sysconfdir}/${package}"
+configfile="${configdir}/setup.conf"
+
+logdir="${localstatedir}/${package}"
+logfile="${logdir}/setup.log"
+
+export configdir
+export configfile
+
+export logdir
+export logfile
+
+# Set the umask.
+umask 022
+
+# Include some core functionality.
+. "${libexecdir}/${package}/lib/functions.sh"
+. "${libexecdir}/${package}/lib/root.sh"
+
+########################################################################
+# Setup logging ########################################################
+########################################################################
+
+# Make sure the logging directory exists.
+mkdir -p -- "${logdir}/"
+
+# Print spacer if there is an existing log.
+if [ -f "${logfile}" ]
+then
+	printf '\n\n' >>"${logfile}"
+fi
+
+# Print new run header.
+{
+	printf '%*s\n' 72 | tr ' ' '#'
+	printf '%*s\n' 72 | tr ' ' '#'
+	printf '%*s\n' 72 | tr ' ' '#'
+	printf '#\n'
+	printf '# Package name: %s\n' "${package}"
+	printf '# Date-time: %s\n' "$(date --rfc-3339=seconds)"
+	printf '# Install prefix: %s\n' "${prefix}"
+	printf '#\n'
+	printf '# Directories:\n'
+	printf '#   %-16s = %s\n' 'bindir' "${bindir}"
+	printf '#   %-16s = %s\n' 'libexecdir' "${libexecdir}"
+	printf '#   %-16s = %s\n' 'sysconfdir' "${sysconfdir}"
+	printf '#   %-16s = %s\n' 'localstatedir' "${localstatedir}"
+	printf '#\n'
+	printf '# Exported variables:\n'
+	printf '#   %-16s = %s\n' 'configgdir' "${configdir}"
+	printf '#   %-16s = %s\n' 'configfile' "${configfile}"
+	printf '#   %-16s = %s\n' 'loggdir' "${logdir}"
+	printf '#   %-16s = %s\n' 'logfile' "${logfile}"
+	printf '#\n'
+} >>"${logfile}"

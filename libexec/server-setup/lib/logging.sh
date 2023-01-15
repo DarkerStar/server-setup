@@ -18,11 +18,24 @@
 #                                                                      #
 ########################################################################
 
-# vim: syntax=sh #######################################################
+# FUNCTION: log [MESSAGE]... ###########################################
+# FUNCTION: ... | log ##################################################
+#
+# Writes a message to the log.
+#
+# If the function is called with arguments, those arguments are the
+# message written to the log. Otherwise, standard input is written to
+# the log.
 
-# Require root #########################################################
+log() {
+	{
+		printf '[%s]: ' "${script_name}"
 
-if [ $(/usr/bin/id -u) -ne 0 ]
-then
-	error 'must be run as root'
-fi
+		if [ ${#} -ne 0 ]
+		then
+			printf '%s\n' "${*}"
+		else
+			cat
+		fi
+	} >>"${logfile}"
+}

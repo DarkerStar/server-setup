@@ -18,8 +18,6 @@
 #                                                                      #
 ########################################################################
 
-# vim: syntax=sh #######################################################
-
 # If logging function is not defined, define a dummy function.
 #
 # Presumably logging will be enabled later.

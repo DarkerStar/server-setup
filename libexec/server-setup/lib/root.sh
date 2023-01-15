@@ -18,17 +18,9 @@
 #                                                                      #
 ########################################################################
 
-# vim: syntax=sh #######################################################
+# Require root #########################################################
 
-log() {
-	{
-		printf '[%s]: ' "${script_name}"
-
-		if [ ${#} -ne 0 ]
-		then
-			printf '%s\n' "${*}"
-		else
-			cat
-		fi
-	} >>"${localstatedir}/${package}/setup.log"
-}
+if [ $(/usr/bin/id -u) -ne 0 ]
+then
+	error 'must be run as root'
+fi
