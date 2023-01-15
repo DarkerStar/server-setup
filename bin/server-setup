@@ -171,5 +171,20 @@ fi
 	printf '#   %-16s = %s\n' 'configfile' "${configfile}"
 	printf '#   %-16s = %s\n' 'loggdir' "${logdir}"
 	printf '#   %-16s = %s\n' 'logfile' "${logfile}"
-	printf '#\n'
 } >>"${logfile}"
+
+########################################################################
+# Setup configuration ##################################################
+########################################################################
+
+. "${libexecdir}/${package}/lib/config.sh"
+
+dirname="$(get-config core.dirname)"
+
+cat <<EOF >>"${logfile}"
+#
+# Output directory name = ${dirname}
+#   /etc/${dirname}
+#   /var/cache/${dirname}
+#   /var/log/${dirname}
+EOF
