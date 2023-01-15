@@ -24,3 +24,94 @@
 
 set -e
 set -u
+
+########################################################################
+# Configuration ########################################################
+########################################################################
+
+# package_prefix ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# By default, the package name is `server-setup`, but if there is an
+# issue with conflicts or anything else, you can prefix it to
+# disambiguate. For example, if you set `package_prefix` to `indi`, then
+# the package name will be `indi-server-setup`.
+#
+# Default: ''
+package_prefix=
+
+# package ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# The package name, which is also the name of the main executable, and
+# the name used for various directories. By default it's `server-setup`,
+# but it can be prefixed if desired (see `package_prefix`).
+#
+# Default: "${package_prefix:+${package_prefix}-}server-setup"
+package="${package_prefix:+${package_prefix}-}server-setup"
+
+########################################################################
+# Directories ##########################################################
+########################################################################
+
+# The directories are set up according to the GNU conventions.
+# See:
+#  https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
+#
+# The only relevant directories variables here are:
+#   * `prefix`
+#   * `exec_prefix`
+#   * `bindir`
+#   * `libexecdir`
+#   * `sysconfdir`
+#   * `localstatedir`
+#
+# If `prefix` is set, all other variables are set accordingly (unless
+# overriden), according to the GNU conventions.
+
+# Directories configuration ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+unset prefix
+unset exec_prefix
+unset bindir
+unset libexecdir
+unset sysconfdir
+unset localstatedir
+
+# Directories defaults ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# If the prefix is not set, assume it is `/opt/${package}`, but also set
+# some other directories to be `/opt`-appropriate.
+if [ x${prefix+y}${prefix:+z} = x ]
+then
+	prefix="/opt/${package}"
+
+	if [ x${sysconfdir+y}${sysconfdir:+z} = x ]
+	then
+		sysconfdir=/etc/opt
+	fi
+
+	if [ x${localstatedir+y}${localstatedir:+z} = x ]
+	then
+		localstatedir=/var/opt
+	fi
+fi
+
+exec_prefix="${exec_prefix:-${prefix}}"
+bindir="${bindir:-${exec_prefix}/bin}"
+libexecdir="${libexecdir:-${exec_prefix}/libexec}"
+sysconfdir="${sysconfdir:-${prefix}/etc}"
+localstatedir="${localstatedir:-${prefix}/var}"
+
+# Export directories ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+export prefix
+export exec_prefix
+export bindir
+export libexecdir
+export sysconfdir
+export localstatedir
+
+########################################################################
+# Preparation ##########################################################
+########################################################################
+
+script_name="${package}"
