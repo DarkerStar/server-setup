@@ -18,28 +18,4 @@
 #                                                                      #
 ########################################################################
 
-# Automatic line ending conversion #####################################
-
-*   text=auto
-
-# Documentation ########################################################
-
-README  linguist-language=Markdown  text    export-ignore
-LICENSE linguist-language=Markdown  text    export-ignore
-
-# Sample configuration #################################################
-
-etc/setup.conf.sample   linguist-language=Git-config    text    export-ignore
-
-# Main executable ######################################################
-
-bin/server-setup    linguist-language=Shell     text    eol=lf
-
-# Includes #############################################################
-
-libexec/include.inc     linguist-language=Shell     text    eol=lf
-libexec/include/*.inc   linguist-language=Shell     text    eol=lf
-
-# Modules ##############################################################
-
-libexec/modules/*   linguist-language=Shell     text    eol=lf
+# vim: syntax=sh #######################################################
