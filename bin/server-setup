@@ -188,3 +188,14 @@ cat <<EOF >>"${logfile}"
 #   /var/cache/${dirname}
 #   /var/log/${dirname}
 EOF
+
+########################################################################
+# Setup module management ##############################################
+########################################################################
+
+. "${libexecdir}/${package}/lib/modules.sh"
+
+{
+	printf '#\n# Modules already done:\n'
+	sed 's/^/#   /' "${logdir}/modules.done"
+} >>"${logfile}"
