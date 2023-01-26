@@ -177,6 +177,12 @@ fi
 # Setup configuration ##################################################
 ########################################################################
 
+# Make sure git is installed.
+{
+	printf '#\n# Git install status:\n'
+	DEBIAN_FRONTEND=noninteractive apt-get -y --mark-auto install git | sed 's/^/#     '
+} >>"${logfile}"
+
 . "${libexecdir}/${package}/lib/config.sh"
 
 dirname="$(get-config core.dirname)"
